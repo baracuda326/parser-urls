@@ -1,0 +1,33 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: peer
+spec:
+  selector:
+    app: peer
+  ports:
+    - protocol: TCP
+      port: 8080
+      nodePort: 30001
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: peer
+spec:
+  selector:
+    matchLabels:
+      app: peer
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: peer
+    spec:
+      containers:
+        - name: peer
+          image: peer
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
